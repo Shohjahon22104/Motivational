@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rise83: Daily Discipline Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      text-align: center;
+      font-weight: normal;
+      font-size: 18px;
+      color: #666;
+    }
+    #quote-box {
+      margin-top: 20px;
+      text-align: center;
+      font-style: italic;
+      font-size: 18px;
+      color: #555;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+    .circle {
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .completed {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rise83: Daily Discipline Tracker</h1>
+  <h2>From July 19, 2025 to October 10, 2025</h2>
+  <div id="quote-box"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="calendar-body">
+    </tbody>
+  </table>
+
+  <script>
+    const quotes = [
+      "Discipline is the bridge between goals and accomplishment. – Jim Rohn",
+      "Success is the sum of small efforts, repeated day in and day out. – Robert Collier",
+      "Your future is created by what you do today, not tomorrow. – Anonymous",
+      "Push yourself, because no one else is going to do it for you.",
+      "Small progress is still progress.",
+      "Consistency is harder when no one is clapping for you. But keep going.",
+      "Make your bed. Start small. Start strong."
+    ];
+
+    const today = new Date();
+    const quoteIndex = today.getDate() % quotes.length;
+    document.getElementById("quote-box").textContent = quotes[quoteIndex];
+
+    const startDate = new Date("2025-07-19");
+    const totalDays = 83;
+    const tbody = document.getElementById("calendar-body");
+
+    for (let i = 0; i < totalDays; i++) {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() + i);
+      const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      const saved = localStorage.getItem(`day_${i}`);
+      const isDone = saved === 'true';
+
+      const row = document.createElement("tr");
+      const dayCell = document.createElement("td");
+      dayCell.textContent = i + 1;
+
+      const dateCell = document.createElement("td");
+      dateCell.textContent = dateStr;
+
+      const statusCell = document.createElement("td");
+      const icon = document.createElement("span");
+      icon.classList.add("circle");
+      icon.innerHTML = isDone ? '✅' : '⭕';
+      if (isDone) icon.classList.add("completed");
+
+      icon.addEventListener("click", () => {
+        const completed = icon.innerHTML === '✅';
+        icon.innerHTML = completed ? '⭕' : '✅';
+        if (completed) {
+          icon.classList.remove("completed");
+        } else {
+          icon.classList.add("completed");
+        }
+        localStorage.setItem(`day_${i}`, !completed);
+      });
+
+      statusCell.appendChild(icon);
+
+      row.appendChild(dayCell);
+      row.appendChild(dateCell);
+      row.appendChild(statusCell);
+      tbody.appendChild(row);
+    }
+  </script>
+  <div id="quote-of-the-day">Loading...</div>
+  <script src="quotes.js"></script>
+</body>
+</html>
