@@ -127,5 +127,67 @@
   </script>
   <div id="quote-of-the-day">Loading...</div>
   <script src="quotes.js"></script>
+  <h1>83-Day Motivational Calendar</h1>
+
+  <div id="calendar"></div>
+
+  <script>
+    const quotes = [
+      "Start strong and never look back.",
+      "One step at a time beats no steps at all.",
+      "You don’t have to be extreme, just consistent.",
+      "The journey of 83 days starts with day one.",
+      "Build habits, not excuses.",
+      "A little progress each day adds up to big results.",
+      "Keep showing up.",
+      // Add up to 83 quotes here
+      "You did it. Remember how this feels."
+    ];
+
+    const startDate = new Date("2025-07-19");
+    const calendarEl = document.getElementById("calendar");
+
+    for (let i = 0; i < 83; i++) {
+      const currentDate = new Date(startDate);
+      currentDate.setDate(currentDate.getDate() + i);
+      const dateStr = currentDate.toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' });
+
+      const noteId = `note-${i}`;
+      const quote = quotes[i] || "Stay motivated!";
+
+      calendarEl.innerHTML += `
+        <div class="day-box">
+          <h3>Day ${i + 1} – ${dateStr}</h3>
+          <div class="quote">"${quote}"</div>
+          <div class="note-preview" onclick="toggleNote('${noteId}')">📝 Click to add/view note</div>
+          <textarea id="${noteId}" oninput="saveNote('${noteId}')"></textarea>
+        </div>
+      `;
+    }
+
+    function toggleNote(id) {
+      const el = document.getElementById(id);
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function saveNote(id) {
+      const el = document.getElementById(id);
+      localStorage.setItem(id, el.value);
+    }
+
+    // Load saved notes on page load
+    window.onload = function () {
+      for (let i = 0; i < 83; i++) {
+        const id = `note-${i}`;
+        const saved = localStorage.getItem(id);
+        if (saved) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.value = saved;
+          }
+        }
+      }
+    };
+  </script>
 </body>
 </html>
